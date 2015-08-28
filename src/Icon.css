@@ -1,0 +1,16 @@
+/**
+ * Icon Component Style for tingle
+ * @author hanyu
+ *
+ * Copyright 2014-2015, Tingle Team, Alinw.
+ * All rights reserved.
+ */
+.tIcon {
+  width: 32px;
+  height: 32px;
+  fill: #666;
+  vertical-align: middle;
+  background: transparent;
+}
+
+/*# sourceMappingURL=Icon.css.map */
