@@ -13,14 +13,14 @@ class Icon extends React.Component {
 
     render() {
         return (
-            <svg className={this.props.className}
+            <svg className={'tIcon ' + this.props.className}
              dangerouslySetInnerHTML={{__html: '<use xlink:href="#' + this.props.id + '"/>'}}/>
         );
     }
 }
 
 Icon.defaultProps = {
-    className: 'tIcon'
+    className: ''
 }
 
 // http://facebook.github.io/react/docs/reusable-components.html
