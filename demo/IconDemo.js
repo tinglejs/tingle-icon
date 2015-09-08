@@ -6,9 +6,9 @@
  * All rights reserved.
  */
 
-var classnames = require('classnames');
+let classnames = require('classnames');
 
-var Icon = require('../src');
+let Icon = require('../src');
 
 class Demo extends React.Component {
 

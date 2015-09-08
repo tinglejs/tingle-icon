@@ -5,7 +5,7 @@
  * Copyright 2014-2015, Tingle Team, Alinw.
  * All rights reserved.
  */
-var classnames = require('classnames');
+let classnames = require('classnames');
 class Icon extends React.Component {
 
     constructor(props) {
@@ -13,7 +13,7 @@ class Icon extends React.Component {
     }
 
     render() {
-        var t = this;
+        let t = this;
         return <svg className={classnames('tIcon', {
             [t.props.className]: !!t.props.className
         })} dangerouslySetInnerHTML={{
@@ -23,6 +23,8 @@ class Icon extends React.Component {
 }
 
 Icon.defaultProps = {
+    className:"",
+    id:""
 }
 
 // http://facebook.github.io/react/docs/reusable-components.html

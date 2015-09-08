@@ -6,6 +6,6 @@
  * All rights reserved.
  */
 
-var Context = require('tingle-context');
-var Demo = require('./IconDemo');
+let Context = require('tingle-context');
+let Demo = require('./IconDemo');
 React.render(<Demo/>, document.getElementById('TingleDemo'));
