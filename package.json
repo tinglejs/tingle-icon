@@ -20,7 +20,6 @@
   ],
   "dependencies": {
     "classnames": "^2.1.2",
-    "tingle-context": "~0.1.0",
     "tingle-style": "~0.1.0"
   },
   "devDependencies": {
@@ -30,7 +29,8 @@
     "tingle-dev-tools": "latest",
     "zepto": "0.0.4",
     "fastclick": "^1.0.6",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "tingle-context":"0.1.0"
   },
   "scripts": {
     "start": "gulp d"
