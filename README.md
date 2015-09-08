@@ -1,6 +1,6 @@
-## Icon
+# Icon [![npm version](https://badge.fury.io/js/tingle-icon.svg)](http://badge.fury.io/js/tingle-icon)
 
-icon图标展示
+Icon图标展示
 
 ![icon viewer](http://gtms01.alicdn.com/tps/i1/TB1LYlgIVXXXXcWXXXXHXIoYFXX-285-253.png)
 
@@ -11,14 +11,14 @@ icon图标展示
 
 ## 样式依赖
 
-```
+```html
 <link rel="stylesheet" href="./node_modules/tingle-style/src/tingle.css">
 <link rel="stylesheet" href="./src/Icon.css">
 ```
 
 ### JSX
 
-```
+```js
 <Icon className="icon" id="baby"/>
 <Icon className="icon customCls" id="headphones"/>
 ...
@@ -34,7 +34,6 @@ icon图标展示
 
 
 > 注1: id的值默认情况下是根据SVG资源名称相对应的
->
 
 
 ## Links 相关链接
