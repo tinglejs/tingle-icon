@@ -1,6 +1,6 @@
 {
   "name": "tingle-icon",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "svg icon",
   "repository": "https://github.com/tinglejs/tingle-icon.git",
   "author": {
@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "classnames": "^2.1.2",
-    "tingle-style": "~0.1.0"
+    "tingle-style": "~0.2.0"
   },
   "devDependencies": {
     "babel-core": "^5.8.19",
