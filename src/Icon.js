@@ -6,6 +6,8 @@
  * All rights reserved.
  */
 let classnames = require('classnames');
+let Tingle = require('tingle-context');
+
 class Icon extends React.Component {
 
     constructor(props) {
@@ -17,7 +19,7 @@ class Icon extends React.Component {
         return <svg className={classnames('tIcon', {
             [t.props.className]: !!t.props.className
         })} dangerouslySetInnerHTML={{
-            __html: '<use xlink:href="#' + t.props.id + '"/>'
+            __html: '<use xlink:href="' + Tingle.getGlobal('svgPath') + '#' + t.props.id + '"/>'
         }}/>
     }
 }

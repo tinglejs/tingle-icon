@@ -1,6 +1,6 @@
 {
   "name": "tingle-icon",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "svg icon 解决方案。",
   "repository": "https://github.com/tinglejs/tingle-icon.git",
   "author": {
@@ -30,7 +30,7 @@
     "zepto": "0.0.4",
     "fastclick": "^1.0.6",
     "react": "^0.13.3",
-    "tingle-context":"0.1.0"
+    "tingle-context":"0.1.3"
   },
   "scripts": {
     "start": "gulp d"
