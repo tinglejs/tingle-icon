@@ -4,6 +4,10 @@ Icon图标展示
 
 ![icon viewer](http://gtms01.alicdn.com/tps/i1/TB1LYlgIVXXXXcWXXXXHXIoYFXX-285-253.png)
 
+## Notice
+
+使用最新的tingle-icon组件需要最新的tingle-context支持，具体详情可查看History记录。
+
 ## Best Practice 最佳实践
 
 这是一个 tingle 组件，使用SVG来制作icon系统的解决方案。
