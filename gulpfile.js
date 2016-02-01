@@ -6,12 +6,185 @@
  * All rights reserved.
  */
 
+// https://github.com/gulpjs/gulp/tree/master/docs
 var gulp = require('gulp');
-var devTools = require('tingle-dev-tools');
-gulp.tasks = devTools.tasks;
+var fs = require('fs');
 
-// available remote tasks see here:
-// https://github.com/tinglejs/tingle-dev-tools
+var babel = require('gulp-babel');
+var uglify = require('gulp-uglify');
+var webpack = require('webpack');
 
-// more local tasks add here
-// gulp.task('local_task', localTask);
+// http://browsersync.io/
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
+
+// https://github.com/floridoo/gulp-sourcemaps
+var sourcemaps = require('gulp-sourcemaps');
+
+// https://github.com/stevelacy/gulp-stylus
+var stylus = require('gulp-stylus');
+
+// https://github.com/wearefractal/gulp-concat
+var concat = require('gulp-concat');
+
+// https://www.npmjs.com/package/gulp-just-replace/
+var replace = require('gulp-just-replace');
+
+var gulpUniqueFile = require('gulp-unique-files');
+var pathMap = require('gulp-pathmap');
+
+//make inline svg
+var svgSymbols = require('gulp-svg-symbols');
+
+gulp.task('pack_demo', function(cb) {
+    webpack(require('./webpack.dev.js'), function (err, stats) {
+        // 重要 打包过程中的语法错误反映在stats中
+        console.log('webpack log:' + stats);
+        if (stats.hasErrors()) {
+            // 异常日志打印到屏幕
+            fs.writeFileSync('./demo/dist/demo.js', [
+                'document.body.innerHTML="<pre>',
+                stats.toJson().errors[0].replace(/[\n\r]/g, '<br>').replace(/\[\d+m/g, '').replace(/"/g, '\\"'),
+                '</pre>";',
+                'document.body.firstChild.style.fontFamily="monospace";',
+                'document.body.firstChild.style.lineHeight="1.5em";',
+                'document.body.firstChild.style.margin="1em";',
+            ].join(''));
+        }
+        console.info('###### pack_demo done ######');
+        cb();
+    });
+});
+
+gulp.task('stylus_component', function(cb) {
+    gulp.src(['./src/**/*.styl'])
+        .pipe(sourcemaps.init())
+        .pipe(stylus())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./src'));
+    console.info('###### stylus_component done ######');
+    cb();
+});
+
+gulp.task('stylus_demo', function(cb) {
+    gulp.src([
+            './tingle/**/src/*.css',
+            './node_modules/**/src/*.css',
+            './demo/src/**/*.styl',
+            '!./tingle/tingle-style/**/*.css'
+        ])
+        .pipe(sourcemaps.init())
+        .pipe(stylus())
+        .pipe(concat('demo.css'))
+        .pipe(replace([{
+            search: /\/\*#\ssourceMappingURL=([^\*\/]+)\.map\s\*\//g,
+            replacement: '/* end for `$1` */\n'
+        }]))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./demo/dist'));
+    console.info('###### stylus_demo done ######');
+    cb();
+});
+
+var through = require('through2');
+
+// 命名方式是 xxx.svg ，会把fill都干掉
+// 命名方式是 xxx.color.svg,  会保留svg中的颜色
+function svgFilter() {
+    return through.obj(function(file, enc, cb) {
+
+        // console.log(file.path + ':\n');
+        if (!!file.path.match(/\.color\.svg$/)) {
+            //console.log('file.path');
+            file.path = file.path.replace(/\.color\.svg$/, '.svg');
+        } else if (!!file.path.match(/\.ignore\.svg$/)) {
+            cb();
+            return;
+        } else {
+            var fileContent = file.contents.toString();
+            // console.log(fileContent.match(/\sfill="[^"]*\"\s?/g));
+            file.contents = new Buffer(fileContent.replace(/\sfill="[^"]*\"\s?/g, ' '));
+        }
+
+        this.push(file);
+        cb();
+    });
+}
+
+gulp.task('svg', function () {
+    return gulp.src([
+            './node_modules/tingle-*/src/svg/**/*.svg',
+            './node_modules/@ali/tingle-*/src/svg/**/*.svg',
+            './tingle/*/src/svg/**/*.svg',
+            './demo/src/svg/**/*.svg',
+            './src/svg/**/*.svg',
+        ])
+        .pipe(pathMap('%f'))
+        .pipe(gulpUniqueFile())
+        .pipe(svgFilter())
+        .pipe(svgSymbols({
+            templates: ['default-svg']
+        }))
+        .pipe(gulp.dest('./demo/dist'));
+});
+
+gulp.task('reload_by_js', ['pack_demo'], function () {
+    reload();
+});
+
+gulp.task('reload_by_component_css', ['stylus_component'], function () {
+    reload();
+});
+
+gulp.task('reload_by_demo_css', ['stylus_demo'], function () {
+    reload();
+});
+
+gulp.task('reload_by_svg', ['svg'], function () {
+    reload();
+});
+
+// 开发`Tingle component`时，执行`gulp develop` or `gulp d`
+gulp.task('develop', [
+    'pack_demo',
+    'stylus_component',
+    'stylus_demo',
+    'svg'
+], function() {
+    browserSync({
+        server: {
+            baseDir: './'
+        }
+    });
+
+    gulp.watch(['src/**/*.js', 'demo/src/**/*.js'], ['reload_by_js']);
+
+    gulp.watch('src/**/*.styl', ['reload_by_component_css']);
+
+    gulp.watch('demo/src/**/*.styl', ['reload_by_demo_css']);
+
+    // 监听svg icon文件的变化
+    gulp.watch([
+        'src/svg/tingle/*.svg', // 来自tingle提供的icon
+        'src/svg/custom/*.svg'  // 控件自定义的icon
+    ], ['reload_by_svg']);
+});
+
+gulp.task('build', function () {
+    return gulp.src(__dirname + '/src/**/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(babel({
+            presets: ['es2015', 'stage-1', 'react']
+        }))
+        .pipe(uglify())
+        // 独立的map文件不起作用
+        // http://stackoverflow.com/questions/27671390/why-to-inline-source-maps
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('dist'));
+})
+
+// 快捷方式
+gulp.task('d', ['develop']);
+gulp.task('server', ['develop']);
+gulp.task('b', ['build']);
+
