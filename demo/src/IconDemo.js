@@ -17,7 +17,7 @@ const Icon = require('../../src');
 const Collection = require('tingle-collection');
 
 Context.setGlobal({
-    'icon.src': './demo/dist/svg-symbols.svg'
+    'Icon.src': './demo/dist/svg-symbols.svg'
 });
 
 class Demo extends React.Component {

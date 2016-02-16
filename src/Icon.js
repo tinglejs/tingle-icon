@@ -21,7 +21,7 @@ class Icon extends React.Component {
     return <svg className={classnames('tIcon', {
       [className]: !!className
     })} fill={fill} width={width} height={height} {...other}>
-      <use xlinkHref={(Context.getGlobal('icon.src') || t.props.src || '') + '#' + t.props.id}/>
+      <use xlinkHref={(Context.getGlobal('Icon.src') || t.props.src || '') + '#' + t.props.id}/>
     </svg>
   }
 }
