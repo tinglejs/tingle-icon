@@ -35,6 +35,7 @@ var pathMap = require('gulp-pathmap');
 
 //make inline svg
 var svgSymbols = require('gulp-svg-symbols');
+var through = require('through2');
 
 gulp.task('pack_demo', function(cb) {
     webpack(require('./webpack.dev.js'), function (err, stats) {
@@ -86,10 +87,9 @@ gulp.task('stylus_demo', function(cb) {
     cb();
 });
 
-var through = require('through2');
-
-// 命名方式是 xxx.svg ，会把fill都干掉
-// 命名方式是 xxx.color.svg,  会保留svg中的颜色
+// 命名方式是 xxx.svg, 会把fill都干掉
+// 命名方式是 xxx.color.svg, 会保留svg中的颜色
+// 命名方式是 xxx.ignore.svg, 会忽略该svg文件
 function svgFilter() {
     return through.obj(function(file, enc, cb) {
 
@@ -102,7 +102,8 @@ function svgFilter() {
             return;
         } else {
             var fileContent = file.contents.toString();
-            // console.log(fileContent.match(/\sfill="[^"]*\"\s?/g));
+
+            // FIXME 这个地方还要增强, illustrator和sketch导出的svg文件, 表示颜色的方式不一致!!!
             file.contents = new Buffer(fileContent.replace(/\sfill="[^"]*\"\s?/g, ' '));
         }
 
@@ -170,6 +171,7 @@ gulp.task('develop', [
     ], ['reload_by_svg']);
 });
 
+// 发布`Tingle component`之前要先build， 执行`gulp build` 或 `gulp b`
 gulp.task('build', function () {
     return gulp.src(__dirname + '/src/**/*.js')
         .pipe(sourcemaps.init())
@@ -177,7 +179,7 @@ gulp.task('build', function () {
             presets: ['es2015', 'stage-1', 'react']
         }))
         .pipe(uglify())
-        // 独立的map文件不起作用
+        // 独立的map文件不起作用, 先写到build后的js文件里
         // http://stackoverflow.com/questions/27671390/why-to-inline-source-maps
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('dist'));
@@ -185,6 +187,7 @@ gulp.task('build', function () {
 
 // 快捷方式
 gulp.task('d', ['develop']);
-gulp.task('server', ['develop']);
 gulp.task('b', ['build']);
 
+// 保留nowa的命令
+gulp.task('server', ['develop']);

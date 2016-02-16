@@ -10,7 +10,10 @@ const classnames = require('classnames');
 
 const Context = require('tingle-context');
 const Icon = require('../../src');
+
+// build之后, 测试一下下面一行, 把上面一行注释掉
 //const Icon = require('../../dist');
+
 const Collection = require('tingle-collection');
 
 Context.setGlobal({
@@ -67,7 +70,7 @@ class Demo extends React.Component {
                     <Icon id="gift" fill="#7bc380"/>
                     <Icon id="idea" fill="#942a09"/>
                     <Icon id="info" fill="#e65100"/>
-                </Collection>dd
+                </Collection>
             </div>
         );
     }
