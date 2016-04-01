@@ -1,79 +1,33 @@
-/**
- * Icon Component Demo for tingle
- * @author hanyu
- *
- * Copyright 2014-2015, Tingle Team, Alinw.
- * All rights reserved.
- */
-
-const classnames = require('classnames');
-
-const Context = require('tingle-context');
-const Icon = require('../../src');
+import Icon from '../../src';
 
 // build之后, 测试一下下面一行, 把上面一行注释掉
 //const Icon = require('../../dist');
 
-const Collection = require('tingle-collection');
-
-Context.setGlobal({
-    'Icon.src': './demo/dist/svg-symbols.svg'
-});
+Icon.config = {
+  ionicons_svg_url : './src/ionicons.svg',
+  tingle_svg_url: './src/tingle.svg'
+}
 
 class Demo extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            colorIcons: [
-                'about',
-                'chart',
-                'picture',
-                'services',
-                'video'
-            ],
-            icons: [
-                'cancel',
-                'download',
-                'gift',
-                'idea',
-                'info'
-            ]
-        }
-    }
+  render() {
+    return (
+      <div style={{padding: '20px'}}>
+        <Icon name="social-github" type="ionicons"/>
+        <Icon name="hammer" type="ionicons"/>
+        <Icon name="trash-a" type="ionicons"/>
+        <Icon name="trash-b" type="ionicons"/>
+        <Icon name="clipboard" type="ionicons"/>
 
-    render() {
-        return (
-            <div>
-                <div className="tP20 tFAC">
-                    <Icon id="tingle-logo-v" className="logo"/>
-                </div>
-                <div className="tBCe tFAC tLH44">多种颜色的SVG图标</div>
-                <Collection col={5} square={true}>
-                    {React.Children.toArray(this.state.colorIcons.map((icon) => {
-                        return <Icon id={icon} className="demoIcon"/>
-                    }))}
-                </Collection>
-                <div className="tBCe tFAC tLH44">单色SVG图标</div>
-                <Collection col={5} square={true}>
-                    {React.Children.toArray(this.state.icons.map((icon) => {
-                        return <Icon id={icon} className="demoIcon"/>
-                    }))}
-                </Collection>
-                <div className="tBCe tFAC tLH44">单色SVG图标, 设置尺寸和颜色</div>
-                <Collection col={5} square={true}>
-                    {React.Children.toArray(this.state.icons.map((icon) => {
-                        return <Icon id={icon} className="demoIcon2"/>
-                    }))}
-                    <Icon id="cancel" fill="#4d9df0"/>
-                    <Icon id="download" fill="#9462a9"/>
-                    <Icon id="gift" fill="#7bc380"/>
-                    <Icon id="idea" fill="#942a09"/>
-                    <Icon id="info" fill="#e65100"/>
-                </Collection>
-            </div>
-        );
-    }
+        <Icon name="idea" type="tingle" />
+        <Icon name="tingle-logo-vcolor" type="tingle" />
+        <Icon name="chartcolor" type="tingle" />
+      </div>
+    );
+  }
 };
 
 module.exports = Demo;

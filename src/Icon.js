@@ -1,45 +1,51 @@
 /**
- * Icon Component for tinglejs
- * @auther hanyu
- *
- * Copyright 2014-2015, Tingle Team, Alinw.
- * All rights reserved.
- */
+* Icon Component for tinglejs
+* @auther hanyu
+*
+* Copyright 2014-2015, Tingle Team, Alinw.
+* All rights reserved.
+*/
 const classnames = require('classnames');
-const Context = require('tingle-context');
 
-class Icon extends React.Component {
+const Icon = React.createClass({
+  getDefaultProps() {
+    return {
+      className: '',
+      name: '',
+      type: 'ionicons',
+      width: 30,
+      height: 30,
+      src: ''
+    }
+  },
 
-  constructor(props) {
-    super(props);
-  }
+  propTypes: {
+    className: React.PropTypes.string,
+    name: React.PropTypes.string.isRequired,
+    type: React.PropTypes.string.isRequired,
+    width: React.PropTypes.number,
+    height: React.PropTypes.number
+  },
 
   render() {
-    let t = this;
+    let {type, name, width, height, className} = this.props
 
-    let {className, width, height, fill, ...other} = t.props;
-    return <svg className={classnames('tIcon', {
-      [className]: !!className
-    })} fill={fill} width={width} height={height} {...other}>
-      <use xlinkHref={(Context.getGlobal('Icon.src') || t.props.src || '') + '#' + t.props.id}/>
-    </svg>
+    let myClassName = classnames('icon', {
+      [className] : !!className
+    })
+
+    let svgUrl = Icon.config[`${type}_svg_url`]
+    if (!svgUrl) {
+      throw new Error(`Icon.config.${type}_svg_url is not set.`);
+    }
+
+    return (
+      <svg width={width} height={height} className={myClassName}>
+        <use xlinkHref={`${svgUrl}#${name}`}/>
+      </svg>
+    )
   }
-}
+})
 
-Icon.defaultProps = {
-  src: '',
-  className: '',
-  id: '',
-  width: 32,
-  height: 32,
-  fill: '#000'
-}
-
-// http://facebook.github.io/react/docs/reusable-components.html
-Icon.propTypes = {
-  src: React.PropTypes.string,
-  className: React.PropTypes.string,
-  id: React.PropTypes.string.isRequired
-}
-
-module.exports = Icon;
+export default Icon;
+export {Icon};
