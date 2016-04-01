@@ -12,7 +12,7 @@ const Icon = React.createClass({
     return {
       className: '',
       name: '',
-      type: 'ionicons',
+      type: '',
       width: 30,
       height: 30,
       src: ''

@@ -2,9 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/tingle-icon.svg)](http://badge.fury.io/js/tingle-icon)
 
-Icon图标展示，适用于移动端图标展示
-
-<img src="http://gtms01.alicdn.com/tps/i1/TB1LYlgIVXXXXcWXXXXHXIoYFXX-285-253.png" width="285"/>
+基于 svg symbol 的移动端 Icon 组件，tingle-icon 默认会提供一个 ionicons 的 symbol svg，源码中就有，可以下载部署到自己的服务器或cdn上。
 
 ## Install
 
@@ -14,45 +12,50 @@ npm install tingle-icon --save
 
 ## Simple Usage
 
-__[注]__ 使用最新的tingle-icon组件需要最新的tingle-context支持，具体详情可查看History记录。
 
-这是一个 tingle 组件，使用SVG来制作icon系统的解决方案。
-
+在使用前配置你的 svg 文件的 url，格式规则为 `[name]_svg_url`:
 
 ```js
-<Icon className="icon" id="baby"/>
-<Icon className="icon customCls" id="headphones"/>
-...
+Icon.config = {
+  ionicons_svg_url : 'http://yourcdn.com/src/ionicons.svg',
+  tingle_svg_url: 'http://yourcdn.com/src/tingle.svg'
+}
 ```
 
+然后使用 Icon，在上一步定义的 `[name]_svg_url` 中的 **[name]** 会作为 `type` 参数传递给 icon:
+
+```js
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div style={{padding: '20px'}}>
+        <Icon name="social-github" type="ionicons"/>
+        <Icon name="hammer" type="ionicons"/>
+        <Icon name="trash-a" type="ionicons"/>
+        <Icon name="trash-b" type="ionicons"/>
+        <Icon name="clipboard" type="ionicons"/>
+
+        <Icon name="idea" type="tingle" />
+        <Icon name="tingle-logo-vcolor" type="tingle" />
+        <Icon name="chartcolor" type="tingle" />
+      </div>
+    );
+  }
+};
+
+```
 
 ## Props
 
-### id
-
-描述：需要引用的SVG的ID标识
-类型：'string'
-必选：是
-
-示例：
-
-```
-<Icon className="icon" id="baby"/>
-```
-
-### className
-
-描述：自定义样式名，默认为 'tIcon'
-类型：'string'
-必选：否
-
-示例：
-
-```
-<Icon className="icon" id="xxxx"/>
-```
-
-> 注1: id的值默认情况下是根据SVG资源名称相对应的
+| 配置项 | 必填 | 默认值 | 功能/备注 |
+|---|----|---|----|
+| className | optional | '' | 给组件添加额外的class |
+| type | required |''| 按钮的类型, 对应配置中 NAME_svg_url 的 NAME |
+| name | required |''| 对应 symbol svg 中的 id |
 
 
 ## Links 相关链接
